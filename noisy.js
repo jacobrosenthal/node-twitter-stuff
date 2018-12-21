@@ -65,8 +65,12 @@ function getHomeTimeline( results ) {
   // but we need to get data array out of there because the get request will serialize all that
   var params = Object.assign({}, results);
   delete params['data'];
+
+  //how many more to get
   var thisManyMore = results.max - results.data.length
   params.count = thisManyMore >= 200 ? 200 : thisManyMore;
+
+  //from what position
   if(results.data.length){
     params.max_id = results.data[results.data.length-1].id;
   }
@@ -92,11 +96,18 @@ function getHomeTimeline( results ) {
   );
 }
 
+function pretty( users ) {
+  return users.map(function(user){
+    user.screen_name = "https://www.twitter.com/" + user.screen_name;
+    return user
+  });
+}
+
+
 
 getHomeTimeline()
   .then(tweets => printTweetsPerDay(tweets))
   .then(tweets => sortTweetsByNoisyUser(tweets))
-  .then(sortedUser => {
-    console.log(sortedUser.slice(0, 20)); //just show top 20 tweeters
-  })
+  .then(users => pretty(users))
+  .then(users => console.log(users.slice(0, 20)))
   .catch(console.error);
