@@ -46,6 +46,7 @@ var sortTweetsByNoisyUser = function(tweets){
 
 
 function getHomeTimeline( results ) {
+  //if not called recursively, ie the first call with no config, set up the state object
   if(!results) {
     results = {};
   }
@@ -57,6 +58,7 @@ function getHomeTimeline( results ) {
     results.max = 800;
   }
 
+  //not sure its possible to ever get here, but
   if ( results.data.length >= results.max ) {
     return Promise.resolve(results.data);
   }
@@ -79,17 +81,13 @@ function getHomeTimeline( results ) {
     .get("statuses/home_timeline", params)
     .then(function(data) {
 
-      //sadly errors come back as an object, while results come back as an array
-      if(!Array.isArray(data)){
-        return Promise.reject(data);
-      }
-
-      //seems like when theyre done giving you results for any reason, it comes back an empty array
+      //the natural exit
+      //it seems like when theyre done giving you results for any reason, it comes back an empty array
       if(data.length == 0){
         return Promise.resolve(results.data);
       }
 
-      //add new results to old results and recursive call
+      //or add new results to old results and recursive call for more
       results.data = results.data.concat(data);
       return getHomeTimeline( results );
     }

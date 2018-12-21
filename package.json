@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "twitter-lite": "^0.5.0"
+    "twitter-lite": "^0.7.0"
   }
 }
