@@ -73,8 +73,8 @@ function getHomeTimeline( results ) {
   params.count = thisManyMore >= 200 ? 200 : thisManyMore;
 
   //from what position
-  if(results.data.length){
-    params.max_id = results.data[results.data.length-1].id;
+  if (results.data.length) {
+    params.max_id = results.data[results.data.length - 1].id - 1;
   }
 
   return client
